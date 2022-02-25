@@ -1,0 +1,242 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* SCSS */
+@import "/src/scss/style";
+
+//General styles
+.container {
+  max-width: 1500px;
+  padding: 0;
+}
+
+.padding-0 {
+  padding: 0;
+}
+
+// card styling
+.card {
+  .border-top-alert {
+    border-top: 1px solid rgb(219, 3, 3);
+    border-top-style: solid;
+  }
+  .border-top-blue {
+    border-top: 1px solid rgb(3, 115, 219);
+    border-top-style: solid;
+  }
+  .border-top-warn {
+    border-top: 1px solid rgb(219, 125, 3);
+    border-top-style: solid;
+  }
+
+  .card-header {
+    .span {
+      .border-bottom {
+        border: thin solid blue;
+        margin-bottom: 2px;
+        width: 250px;
+      }
+    }
+  }
+}
+
+.dashboard-card {
+  border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  text-align: center !important;
+  cursor: pointer;
+}
+
+.dashboard-card-icon-container {
+  width: 130px;
+  height: 130px;
+  padding: 45px;
+  border-radius: 50%;
+  display: block;
+  position: relative;
+  b {
+    font-size: 20px;
+    color: #ffffff;
+    z-index: 2;
+    position: relative;
+    text-align: center;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    z-index: 1;
+    box-sizing: border-box;
+  }
+}
+
+.dashboard-card-icon {
+  padding: 20px;
+}
+
+.dashboard-card-icon-container-messages {
+  border: 6px dashed #53aef8e3;
+  border-top-color: #0c7fdde3;
+  border-bottom-color: transparent;
+  &::after {
+    background-color: #0c7fdde3;
+  }
+}
+
+.dashboard-card-icon-container-profile {
+  border: 6px dashed #ffc375e3;
+  border-top-color: #fc9713e3;
+  border-bottom-color: transparent;
+  &::after {
+    background-color: #fc9713e3;
+  }
+}
+
+.dashboard-card-icon-container-jobs {
+  border: 6px dashed #9ccc65;
+  border-top-color: #188103e3;
+  border-bottom-color: transparent;
+  &::after {
+    background-color: #188103e3;
+  }
+}
+
+.dashboard-header {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 0.25rem;
+}
+
+.shadow {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.modal-container {
+  width: 800px;
+  position: absolute !important;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.modal-background {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 500;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.nav-image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dropdown-hoover > div:hover {
+  background-color: #c93939;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  color: #ffffff;
+  padding-left: 10px;
+}
+
+.dropdown {
+  min-width: 300px;
+}
+
+.bg-red {
+  background-color: #c93939;
+}
+
+.navigationIcons {
+  display: flex;
+  img {
+    display: block;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  img:not(:last-child) {
+    margin-right: 30px;
+  }
+}
+
+.top-navigation {
+  background-color: #ffffff;
+}
+
+.user-profile-menu > div:hover {
+  color: #c93939;
+}
+
+.user-profile-menu > a:first-child {
+  border-bottom: 1px dotted gray;
+}
+
+.user-profile-menu {
+  max-width: 300px;
+  width: 200px;
+  padding: 0 10px;
+}
+
+.user-profile-menu-container {
+  position: absolute;
+  top: 100%;
+  z-index: 1000;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.bottomNavigationContainer {
+  background-color: #331010;
+}
+
+.navigationLinkContainer {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #000000;
+  max-width: 1500px;
+  width: 1500px;
+  margin: 0 auto;
+}
+
+.linkContainer {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.user-profile-menu > a {
+  color: #000000;
+  padding-top: 20px;
+  padding-bottom: 15px;
+  display: block;
+}
+
+.user-profile-menu > a:hover {
+  color: #f93d3d;
+}
+
+.logo-img {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 50%;
+}
