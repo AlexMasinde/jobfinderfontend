@@ -8,7 +8,9 @@ export default function SearchJobsPage() {
     <div className="bg-main">
       <TopNavigation />
       <BottomNavigation />
-      <SearchComponent />
+      <div className="mt-4">
+        <SearchComponent />
+      </div>
     </div>
   );
 }
