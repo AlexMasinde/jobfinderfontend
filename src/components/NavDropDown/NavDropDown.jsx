@@ -3,13 +3,12 @@ import React, { useState } from "react";
 import placeholder from "../../assets/images/placeholder.png";
 import { useAuth } from "../../contexts/userContext";
 import axios from "../../api/axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function NavDropDown({ name, setShowDropDown, profileImage }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { setAuth } = useAuth();
-  const navigate = useNavigate();
 
   async function handleLogout() {
     if (loading) return;
@@ -17,7 +16,6 @@ export default function NavDropDown({ name, setShowDropDown, profileImage }) {
     try {
       await axios.get("/users/logout", { withCredentials: true });
       setAuth(null);
-      navigate("/");
     } catch (err) {
       console.log(err);
       setError("Please try again");

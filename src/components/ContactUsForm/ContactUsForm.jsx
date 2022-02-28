@@ -33,7 +33,10 @@ export default function ContactUsForm() {
                     <li class="nav-item mail-section">
                       <a class="nav-link text-left active">
                         <span>
-                          <i class="fas fa-envelope"> support@getkazi.com</i>
+                          <i class="fas fa-envelope">
+                            {" "}
+                            support@talentfinder.com
+                          </i>
                         </span>
                       </a>
                     </li>
