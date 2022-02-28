@@ -46,7 +46,7 @@ export default function SearchCandidate() {
       where: {
         ...(name && { fullName: { search: name } }),
         ...(location && { location: location }),
-        ...(country && { country: country }),
+        ...(country && { nationality: country }),
       },
     };
 
