@@ -15,7 +15,7 @@ export default function NavDropDown({ name, setShowDropDown, profileImage }) {
     if (loading) return;
     setLoading(true);
     try {
-      await axios.get("/users/logout");
+      await axios.get("/users/logout", { withCredentials: true });
       setAuth(null);
       navigate("/");
     } catch (err) {
