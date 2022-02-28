@@ -9,6 +9,7 @@ export default function PersistLogin() {
   const { user } = useAuth();
 
   useEffect(() => {
+    console.log(user);
     async function verifyReshToken() {
       try {
         await refresh();
