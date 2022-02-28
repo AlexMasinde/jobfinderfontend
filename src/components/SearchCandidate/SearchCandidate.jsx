@@ -12,7 +12,7 @@ export default function SearchCandidate() {
   const [loading, setLoading] = useState(false);
 
   const locationRef = useRef();
-  const categoryRef = useRef();
+  const countryRef = useRef();
   const nameRef = useRef();
 
   //show clear button
@@ -29,7 +29,7 @@ export default function SearchCandidate() {
 
     locationRef.current.value = null;
     nameRef.current.value = null;
-    categoryRef.current.value = null;
+    countryRef.current.value = null;
   }
 
   function updateError() {
@@ -46,7 +46,7 @@ export default function SearchCandidate() {
       where: {
         ...(name && { fullName: { search: name } }),
         ...(location && { location: location }),
-        ...(country && { category: country }),
+        ...(country && { country: country }),
       },
     };
 
@@ -107,14 +107,14 @@ export default function SearchCandidate() {
                   <select
                     className="custom-select custom-select-sm"
                     onChange={(e) => setCountry(e.target.value)}
-                    ref={categoryRef}
+                    ref={countryRef}
                   >
                     <option value={null} disabled selected></option>
-                    {countries.map((category) => {
-                      return <option key={category}>{category}</option>;
+                    {countries.map((country) => {
+                      return <option key={country}>{country}</option>;
                     })}
                   </select>
-                  <p className="card-text">Category</p>
+                  <p className="card-text">Country</p>
                 </div>
                 <div className="col-xs-4 col-md-4">
                   <input
