@@ -3,6 +3,7 @@ import { useRecruiter } from "../../contexts/recruiterContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import { categories } from "../../utils/jobCategories";
 import { countries, locations } from "../../utils/lists";
+import { validateJobInformationModal } from "../../utils/validators";
 
 export default function RecruiterJobInformationModal({ setAddJob }) {
   const { recruiterJobs, dispatch, editingJob, recruiterProfile } =
@@ -24,7 +25,11 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
     editingJob?.category ?? "Accounting"
   );
   const [joblink, setJoblink] = useState(editingJob?.joblink ?? "");
-  const [deadline, setDeadline] = useState(editingJob?.deadline ?? "");
+  const [deadline, setDeadline] = useState(
+    editingJob?.deadline ?? "2022-01-01"
+  );
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   function toggleJobModal() {
     dispatch({ type: "SET_EDITING", payload: null });
@@ -32,10 +37,16 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
   }
 
   function handleTitle(e) {
+    if (errors.title) {
+      setErrors({ ...errors, title: null });
+    }
     setTitle(e.target.value);
   }
 
   function handleDescription(e) {
+    if (errors.description) {
+      setErrors({ ...errors, description: null });
+    }
     setDescription(e.target.value);
   }
 
@@ -60,6 +71,9 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
   }
 
   function handleJoblink(e) {
+    if (errors.link) {
+      setErrors({ ...errors, link: null });
+    }
     setJoblink(e.target.value);
   }
 
@@ -69,6 +83,13 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const { valid, jobInformationModalErrors } = validateJobInformationModal(
+      title,
+      description,
+      joblink
+    );
+
+    if (!valid) return setErrors(jobInformationModalErrors);
 
     try {
       async function handleJob() {
@@ -123,9 +144,16 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
           setAddJob(false);
         }
       }
+      setLoading(true);
       await handleJob();
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
+      setErrors({
+        ...errors,
+        dataError: "Could not post job! Please try again",
+      });
     }
   }
 
@@ -154,7 +182,7 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
               type="text"
               value={title}
               className="form-control"
-              placeholder="Job title..."
+              placeholder="Job Title..."
               onChange={handleTitle}
             />
           </div>
@@ -273,26 +301,52 @@ export default function RecruiterJobInformationModal({ setAddJob }) {
             <input
               type="text"
               className="form-control"
-              placeholder="Job Link"
+              placeholder="Job link"
               value={joblink}
               onChange={handleJoblink}
             />
           </div>
         </div>
+        {errors?.title && <p className="text-primary ml-2">{errors.title}</p>}
+        {errors?.description && (
+          <p className="text-primary ml-2">{errors.description}</p>
+        )}
+        {errors?.link && <p className="text-primary ml-2">{errors.link}</p>}
+        {errors?.dataError && (
+          <p className="text-primary ml-2">{errors.dataError}</p>
+        )}
         <div className="modal-footer">
           <button
             type="button"
             className="btn btn-danger btn-sm mr-2"
             onClick={toggleJobModal}
+            disabled={loading}
           >
             Close
           </button>
           <button
             type="button"
-            className="btn btn-primary btn-sm"
+            className="btn btn-primary btn-sm post-job-button"
             onClick={handleSubmit}
+            disabled={loading}
           >
-            Post Job
+            {loading && (
+              <div class="lds-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            )}
+            {!loading && "Post Job"}
           </button>
         </div>
       </form>

@@ -11,6 +11,7 @@
     "axios": "^0.26.0",
     "babel-plugin-macros": "^3.1.0",
     "bootstrap": "^4.3.1",
+    "file-saver": "^2.0.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.1",
@@ -42,5 +43,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://jobfinderkenya2022.herokuapp.com/"
+  "proxy": "http://localhost:5001/"
 }

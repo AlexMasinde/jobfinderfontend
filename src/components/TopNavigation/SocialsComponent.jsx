@@ -6,12 +6,17 @@ import instagramicon from "../../assets/icons/instagram.svg";
 import twittericon from "../../assets/icons/twitter.svg";
 
 export default function SocialsComponent() {
-  const icons = [facebookicon, twittericon, instagramicon];
   return (
     <div className="navigationIcons mr-4">
-      {icons.map((icon) => {
-        return <img src={icon} alt={icon.split("i")[1]} key={icon} />;
-      })}
+      <a href="http://www.facebook.com" target="blank">
+        <img src={facebookicon} alt={facebookicon.split("i")[1]} />
+      </a>
+      <a className="ml-2" href="http://www.twitter.com" target="blank">
+        <img src={twittericon} alt={twittericon.split("i")[1]} />
+      </a>
+      <a className="ml-2" href="http://www.instagram.com" target="blank">
+        <img src={instagramicon} alt={instagramicon.split("i")[1]} />
+      </a>
     </div>
   );
 }

@@ -11,6 +11,7 @@ export default function SignUpForm() {
   const [userType, setUserType] = useState("candidate");
   const [userName, setUserName] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const userNameRef = useRef();
 
@@ -60,6 +61,7 @@ export default function SignUpForm() {
     }
 
     try {
+      setLoading(true);
       const response = await axios.post(
         "/users/signup",
         JSON.stringify({ email, password, type: userType, userName }),
@@ -72,8 +74,10 @@ export default function SignUpForm() {
       const { type, accessToken, userId } = response.data;
       const user = { type, userId, accessToken };
       setAuth(user);
+      setLoading(false);
       navigate("/dashboard", { replace: true });
     } catch (err) {
+      setLoading(false);
       if (!err.response) return setErrors({ dataError: "Network Error" });
       setErrors({ dataError: err.response.data.error });
       console.log(err.response.data);
@@ -90,9 +94,9 @@ export default function SignUpForm() {
               alt=""
               className="img-fluid"
             />
-            <h1 className="text-white my-4">SJF Welcomes you!</h1>
+            <h1 className="text-white my-4">Talent Finder Welcomes you!</h1>
             <h4 className="text-white font-weight-normal">
-              Signup to your account and be made member of the SJF.
+              Signup to your account and be made member of the Talent Finder.
             </h4>
           </div>
         </div>
@@ -160,15 +164,32 @@ export default function SignUpForm() {
                   id="customCheck1"
                 />
                 <label for="customCheck1" className="custom-control-label">
-                  Send me the <a href="javascript:"> Newsletter</a> weekly.
+                  Send me the <strong> Newsletter</strong> weekly.
                 </label>
               </div>
               {/* <Link to="/dashboard"> */}
               <button
                 className="btn btn-warning btn-block mb-4"
                 onClick={handleSignUp}
+                disabled={loading}
               >
-                Sign up
+                {loading && (
+                  <div class="lds-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                )}
+                {!loading && "Sign up"}
               </button>
               {errors.dataError && (
                 <p className="text-danger">{errors.dataError}</p>

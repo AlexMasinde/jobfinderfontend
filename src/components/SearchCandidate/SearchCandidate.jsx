@@ -1,9 +1,89 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import axios from "../../api/axios";
+import { locations } from "../../utils/lists";
+import { categories } from "../../utils/jobCategories";
+import CandidateSearchTable from "./CandidateSearchTable";
 
 export default function SearchCandidate() {
+  const [name, setName] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [searchError, setSearchError] = useState(null);
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const locationRef = useRef();
+  const categoryRef = useRef();
+  const nameRef = useRef();
+
+  //show clear button
+  const showClearButton = name || location || category;
+
+  //clear search
+  function clearSearch() {
+    setSearchError(null);
+    setName(null);
+    setLocation(null);
+    setCategory(null);
+
+    setData([]);
+
+    locationRef.current.value = null;
+    nameRef.current.value = null;
+    categoryRef.current.value = null;
+  }
+
+  function updateError() {
+    setTimeout(() => {
+      setSearchError(null);
+    }, 3000);
+  }
+
+  async function handleSearch(e) {
+    e.preventDefault();
+    setSearchError(null);
+
+    const searchObject = {
+      where: {
+        ...(name && { fullName: { search: name } }),
+        ...(location && { location: location }),
+        ...(category && { category: category }),
+      },
+    };
+
+    if (Object.keys(searchObject.where).length === 0) {
+      setSearchError("Please include at least one search field");
+      updateError();
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "/users/search",
+        JSON.stringify(searchObject),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      if (response.data.length === 0) {
+        setSearchError("No results found");
+        updateError();
+      }
+      console.log(response.data);
+      setData(response.data);
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+      setSearchError("Something went wrong! Try again");
+      updateError();
+      console.log(err);
+    }
+  }
   return (
-    <div className="row container mx-auto mt-4">
-      <div className="col-xl-12 col-sm-12">
+    <div className="row container mx-auto mt-4 p-0">
+      <div className="col-xl-12 col-sm-12 p-0">
         <div className="card">
           <div className="card-header bg-light border-top-blue p-3">
             <h5 className="text-blue">Find suitable candidates in minutes</h5>
@@ -14,92 +94,63 @@ export default function SearchCandidate() {
                 <div className="col-xs-4 col-md-4">
                   <select
                     className="custom-select custom-select-sm"
-                    formControlName="searchLocation"
+                    onChange={(e) => setLocation(e.target.value)}
+                    ref={locationRef}
                   >
-                    <option selected value="0">
-                      Any
-                    </option>
-                    <option>Sample Location</option>
+                    <option value={null} disabled selected></option>
+                    {locations.map((location) => {
+                      return <option key={location}>{location}</option>;
+                    })}
                   </select>
                   <p className="card-text">Location</p>
                 </div>
                 <div className="col-xs-4 col-md-4">
                   <select
                     className="custom-select custom-select-sm"
-                    formControlName="jobCategory"
+                    onChange={(e) => setCategory(e.target.value)}
+                    ref={categoryRef}
                   >
-                    <option selected value="0">
-                      Any
-                    </option>
-                    <option>Sample Category</option>
+                    <option value={null} disabled selected></option>
+                    {categories.map((category) => {
+                      return <option key={category}>{category}</option>;
+                    })}
                   </select>
                   <p className="card-text">Category</p>
                 </div>
                 <div className="col-xs-4 col-md-4">
                   <input
-                    formControlName="searchTextBox"
                     className="form-control form-control-sm"
                     type="text"
                     placeholder="Name..."
+                    onChange={(e) => setName(e.target.value)}
+                    ref={nameRef}
                   />
                   <p className="card-text">Name</p>
                 </div>
               </div>
-              <button type="button" className="btn btn-primary btn-sm">
-                Search Now
-              </button>
               <button
                 type="button"
-                className="btn  btn-outline btn-sm text-warning"
-                href="#"
+                className="btn btn-primary btn-sm"
+                onClick={handleSearch}
+                disabled={loading}
               >
-                Clear search
+                {loading ? "Searching..." : "Search Now"}
               </button>
-              <div className="table-responsive p-2 bg-icon">
-                {/* <table
-                  datatable
-                  className="table table-bordered table-sm datatables"
+              {showClearButton && (
+                <button
+                  type="button"
+                  className="btn  btn-outline btn-sm text-warning"
+                  onClick={clearSearch}
                 >
-                  <thead>
-                    <tr className="small bg-primary">
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Telephone</th>
-                      <th>Location</th>
-                      <th className="text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>John Doe</td>
-                      <td>doe@mail.com</td>
-                      <td>0725888552</td>
-                      <td>Nairobi</td>
-                      <td className="text-right">
-                        <button
-                          type="button"
-                          className="btn btn-success btn-outline btn-sm"
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <footer>
-                    <tr>
-                      <td className="col-sm-12 text-center" colspan="5">
-                        <div className="panel panel-default">
-                          <h5>
-                            Oops ! no results found. Try a different criteria.
-                          </h5>
-                        </div>
-                      </td>
-                    </tr>
-                  </footer>
-                </table> */}
-              </div>
+                  Clear search
+                </button>
+              )}
             </div>
+            {searchError && (
+              <h6 className="px-4 pb-2 text-danger">{searchError}</h6>
+            )}
           </form>
+          {data.length > 0 && <CandidateSearchTable data={data} />}
         </div>
       </div>
     </div>

@@ -68,9 +68,9 @@ export default function CandidateFileUploadModal({ setAddFile }) {
                 onChange={(e) => setFileType(e.target.value)}
               >
                 <option selected>CV</option>
-                <option>Certifications</option>
+                <option>Certification</option>
                 <option>Cover Letter</option>
-                <option>Recommendation Letters</option>
+                <option>Recommendation Letter</option>
               </select>
             </div>
           </div>

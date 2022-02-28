@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function RecruiterDashboardHeader() {
   return (
     <div className="row btn-page container mx-auto">
-      <div className="col-xl-12 col-sm-12">
+      <div className="col-xl-12 col-sm-12 px-0">
         <div className="card">
           <div className="card-header bg-light border-top-blue p-3">
             <h5 className="text-color-blue">Dashboard</h5>

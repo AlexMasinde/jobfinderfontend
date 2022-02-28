@@ -9,7 +9,12 @@ export default function useRefreshToken() {
       withCredentials: true,
     });
     setAuth((prev) => {
-      return { ...prev, accessToken: response.data.accessToken };
+      return {
+        ...prev,
+        accessToken: response.data.accessToken,
+        type: response.data.type,
+        userId: response.data.userId,
+      };
     });
     return response.data.accessToken;
   }

@@ -69,7 +69,7 @@ export default function BottomNavigationNormal() {
 
   return (
     <div className="bottomNavigationContainer">
-      <div className="navigationLinkContainer container">
+      <div className="navigationLinkContainer">
         <Link to="/" className="linkContainer">
           <div className="linkImage">
             <i className="feather icon-home text-white"></i>

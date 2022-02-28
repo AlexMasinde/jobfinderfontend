@@ -12,6 +12,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -40,6 +41,8 @@ export default function LoginPage() {
     if (!valid) return setErrors(loginErrors);
 
     try {
+      setLoading(true);
+      setErrors({});
       const response = await axios.post(
         "/users/login",
         JSON.stringify({ email, password }),
@@ -53,8 +56,10 @@ export default function LoginPage() {
       const { type, accessToken, userId } = response.data;
       const user = { type, userId, accessToken };
       setAuth(user);
+      setLoading(false);
       navigate(from, { replace: true });
     } catch (err) {
+      setLoading(false);
       if (!err.response) return setErrors({ dataError: "Network Error" });
       setErrors({ dataError: err.response.data.error });
       console.log(err.response.data);
@@ -73,7 +78,7 @@ export default function LoginPage() {
             />
             <h1 className="text-white my-4">Welcome Back!</h1>
             <h4 className="text-white font-weight-normal">
-              Signin to your account and get to explore SJF.
+              Signin to your account and get to explore Talent Finder.
             </h4>
           </div>
         </div>
@@ -120,9 +125,26 @@ export default function LoginPage() {
 
               <button
                 className="btn btn-block btn-primary mb-0"
+                disabled={loading}
                 onClick={handleLogin}
               >
-                Signin
+                {loading && (
+                  <div class="lds-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                )}
+                {!loading && "Signin"}
               </button>
               {errors.dataError && (
                 <p className="text-danger">{errors.dataError}</p>

@@ -7,8 +7,6 @@ import BottomNavigationAuth from "./BottomNavigationAuth";
 
 export default function BottomNavigation() {
   const { user } = useAuth();
-  const recruiter = user && user.type === "recruiter";
-  const candidate = user && user.type === "candidate";
 
   return (
     <div>

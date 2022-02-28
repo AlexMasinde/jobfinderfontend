@@ -15,45 +15,65 @@ import CandidateSearchPage from "./pages/CandidateSearchPage/CandidateSearchPage
 import { AuthContextProvider } from "./contexts/userContext";
 import DashboardSelect from "./components/DashboardSelect/DashboardSelect";
 import ProfilePageSelect from "./components/ProfilePageSelect/ProfilePageSelect";
-import TicketComponent from "./components/TicketComponent/TicketComponent";
+// import TicketComponent from "./components/TicketComponent/TicketComponent";
 import RequireAuth from "./components/RequireAuth/RequireAuth";
 import RedirectUser from "./components/RedirectUser/RedirectUser";
 import "./styles.scss";
 import RecruiterContextProvider from "./contexts/recruiterContext";
 import CandidateContextProvider from "./contexts/candidateContext";
+import SearchContextProvider from "./contexts/searchContext";
+import PersistLogin from "./components/PersistLogin/PersistLogin";
+import CandidateProfilePagePublic from "./pages/CandidateProfilePagePublic/CandidateProfilePagePublic";
+import ChangePasswordPage from "./pages/ChangePasswordPage/ChangePasswordPage";
 
 function App() {
   return (
     <AuthContextProvider>
       <RecruiterContextProvider>
         <CandidateContextProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/about" element={<AboutUsPage />} />
-              <Route path="/reset" element={<ResetPassword />} />
-              <Route path="/changepassword" element={<ChangePassword />} />
-              <Route path="/contact" element={<ContactUsPage />} />
-              <Route path="/jobsearch" element={<SearchJobsPage />} />
-              <Route
-                path="/candidatesearch"
-                element={<CandidateSearchPage />}
-              />
+          <SearchContextProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<PersistLogin />}>
+                  <Route path="/about" element={<AboutUsPage />} />
+                  <Route path="/contact" element={<ContactUsPage />} />
+                  <Route path="/jobsearch" element={<SearchJobsPage />} />
+                  <Route
+                    path="/candidatesearch/:candidateId"
+                    element={<CandidateProfilePagePublic />}
+                  />
+                  <Route
+                    path="/candidatesearch"
+                    element={<CandidateSearchPage />}
+                  />
+                  <Route path="/" element={<HomePage />} />
+                </Route>
 
-              <Route path="/" element={<HomePage />} />
+                <Route path="/reset" element={<ResetPassword />} />
 
-              <Route element={<RedirectUser />}>
-                <Route path="/signin" element={<LoginPage />} />
-                <Route path="/signup" element={<SignUpPage />} />
-              </Route>
+                <Route element={<RedirectUser />}>
+                  <Route path="/signin" element={<LoginPage />} />
+                  <Route path="/signup" element={<SignUpPage />} />
+                </Route>
 
-              <Route element={<RequireAuth />}>
-                <Route path="/inbox" element={<MessagesPage />} />
-                <Route path="/profile" element={<ProfilePageSelect />} />
-                <Route path="/recruiterjobs" element={<RecruiterJobsPage />} />
-                <Route path="/dashboard" element={<DashboardSelect />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
+                <Route element={<PersistLogin />}>
+                  <Route element={<RequireAuth />}>
+                    <Route path="/inbox" element={<MessagesPage />} />
+                    <Route path="/profile" element={<ProfilePageSelect />} />
+                    <Route
+                      path="/recruiterjobs"
+                      element={<RecruiterJobsPage />}
+                    />
+                    <Route
+                      path="/changepassword"
+                      element={<ChangePasswordPage />}
+                    />
+                    <Route path="/dashboard" element={<DashboardSelect />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </SearchContextProvider>
         </CandidateContextProvider>
       </RecruiterContextProvider>
     </AuthContextProvider>

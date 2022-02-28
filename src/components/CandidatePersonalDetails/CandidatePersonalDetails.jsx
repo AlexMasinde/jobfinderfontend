@@ -5,7 +5,7 @@ import { countries } from "../../utils/lists";
 import { locations } from "../../utils/lists";
 
 export default function CandidatePersonalDetails() {
-  const { candidateProfile } = useCandidate();
+  const { candidateProfile, dispatch } = useCandidate();
 
   const [editing, setEditing] = useState(true);
   const [fullName, setFullName] = useState(candidateProfile?.fullName || "");
@@ -90,7 +90,10 @@ export default function CandidatePersonalDetails() {
         "/profiles/candidate-profile",
         JSON.stringify(dataObject)
       );
-      console.log(response.data);
+      dispatch({
+        type: "SET_CANDIDATE_PROFILE",
+        payload: response.data,
+      });
     } catch (err) {
       console.log(err.message);
     }

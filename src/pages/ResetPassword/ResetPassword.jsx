@@ -12,12 +12,9 @@ export default function ResetPassword() {
               alt=""
               class="img-fluid"
             />
-            <h1 class="text-white my-4">Change securely!</h1>
+            <h1 class="text-white my-4">Change Password!</h1>
             <h4 class="text-white font-weight-normal">
-              Change your account password and make your self more securely Able
-              Pro Dashboard Template.
-              <br />
-              Do not forget to play with live customizer
+              Please enter your email and we will send you a password reset code
             </h4>
           </div>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRecruiter } from "../../contexts/recruiterContext";
 import useAxiosPrivate from "../../hooks/useAxiosPrivate";
 import UploadLogo from "../UploadLogo/UploadLogo";
+import placeholder from "../../assets/images/placeholder.png";
 
 export default function RecruiterHeader() {
   const { recruiterProfile, dispatch } = useRecruiter();
@@ -16,6 +17,8 @@ export default function RecruiterHeader() {
   const [applicationMethod, setApplicationMethod] = useState(
     recruiterProfile.applicationMethod || "Recruiter Website"
   );
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const axiosPrivate = useAxiosPrivate();
 
@@ -70,6 +73,7 @@ export default function RecruiterHeader() {
     const dataObject = editing ? editedValues : allValues;
 
     try {
+      setLoading(true);
       const response = await axiosPrivate.post(
         "/profiles/recruiter-profile",
         JSON.stringify(dataObject)
@@ -78,7 +82,11 @@ export default function RecruiterHeader() {
         type: "SET_RECRUITER_PROFILE",
         payload: response.data,
       });
+      setLoading(false);
+      setEditing(false);
     } catch (err) {
+      setLoading(false);
+      setError("Could not update profile! Please try again later.");
       console.log(err.message);
     }
   }
@@ -111,12 +119,12 @@ export default function RecruiterHeader() {
       <form>
         <div className="card-body">
           <div className="form-group row">
-            <div className="col-sm-2 font-weight-bold">Update logo</div>
+            <div className="col-sm-2 font-weight-bold">Logo</div>
             <div className="col-sm-4">
               <img
                 className="logo-img"
                 alt="recruiter-logo"
-                src={recruiterProfile.photoURL}
+                src={recruiterProfile?.photoURL ?? placeholder}
               />
             </div>
             {editing && <UploadLogo />}
@@ -206,7 +214,7 @@ export default function RecruiterHeader() {
               className="custom-select"
               onChange={handleApplicationMethod}
               defaultValue={applicationMethod}
-              disabled={!editing}
+              disabled={true}
             >
               <option value="Recruiter Website">Recruiter Website</option>
               <option value="Recruiter Email">Recruiter Email</option>
@@ -219,16 +227,33 @@ export default function RecruiterHeader() {
               <div className="col-sm-12 text-center">
                 <button
                   type="button"
-                  className="btn btn-primary"
+                  className="btn btn-primary recruiter-profile-button"
                   onClick={handleSubmit}
-                  disabled={!editing}
+                  disabled={loading}
                 >
-                  Update
+                  {loading && (
+                    <div class="lds-spinner">
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                      <div></div>
+                    </div>
+                  )}
+                  {!loading && "Update"}
                 </button>
               </div>
             </div>
           )}
         </div>
+        {error && <p className="text-primary ml-2">{error}</p>}
       </form>
     </div>
   );

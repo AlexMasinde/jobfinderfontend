@@ -48,8 +48,6 @@ export default function RecruiterContextProvider({ children }) {
           }
         );
 
-        console.log(data);
-
         const { email, username, emailverified } = data;
         const recruiterProfile = {
           ...data.recruiter[0],

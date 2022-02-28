@@ -102,6 +102,7 @@ export default function CandidateContextProvider({ children }) {
 
   return (
     <CandidateContext.Provider value={value}>
+      {console.log(user)}
       {children}
     </CandidateContext.Provider>
   );

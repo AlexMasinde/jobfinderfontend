@@ -1,16 +1,20 @@
 import React, { useRef, useState } from "react";
 import { countries, locations } from "../../utils/lists";
 import { categories } from "../../utils/jobCategories";
-import axios from "../../api/axios";
 import JobsTable from "../JobsTable/JobsTable";
+import { useSearch } from "../../contexts/searchContext";
 
 export default function SearchComponent() {
+  const {
+    jobs,
+    dispatch,
+    searchJobsError: searchError,
+    updateError,
+  } = useSearch();
   const [keyword, setKeyword] = useState(null);
   const [location, setLocation] = useState(null);
   const [category, setCategory] = useState(null);
   const [country, setCountry] = useState(null);
-  const [searchError, setSearchError] = useState(null);
-  const [data, setData] = useState([]);
 
   const locationRef = useRef();
   const countryRef = useRef();
@@ -18,32 +22,42 @@ export default function SearchComponent() {
   const keywordRef = useRef();
 
   //show clear button
-  const showClearButton = keyword || location || category || country;
+  const showClearButton =
+    keyword || location || category || country || jobs.length > 0;
 
   //clear search
   function clearSearch() {
-    setSearchError(null);
     setKeyword(null);
     setLocation(null);
     setCategory(null);
     setCountry(null);
-    setData([]);
 
     locationRef.current.value = null;
     keywordRef.current.value = null;
     categoryRef.current.value = null;
     countryRef.current.value = null;
-  }
+    dispatch({
+      type: "SET_JOBS",
+      payload: [],
+    });
 
-  function updateError() {
-    setTimeout(() => {
-      setSearchError(null);
-    }, 3000);
+    dispatch({
+      type: "SET_SEARCH_JOBS",
+      payload: null,
+    });
+    dispatch({
+      type: "SET_SEARCH_JOBS_ERROR",
+      payload: null,
+    });
   }
 
   async function handleSearch(e) {
+    console.log("searching");
     e.preventDefault();
-    setSearchError(null);
+    dispatch({
+      type: "SET_SEARCH_JOBS_ERROR",
+      payload: null,
+    });
     const searchObject = {
       where: {
         ...(keyword && { title: { search: keyword } }),
@@ -55,32 +69,22 @@ export default function SearchComponent() {
 
     if (Object.keys(searchObject.where).length === 0) {
       console.log("no search");
-      setSearchError("Please include at least one search field");
+      dispatch({
+        type: "SET_SEARCH_JOBS_ERROR",
+        payload: "Please include at least one search field",
+      });
       updateError();
       return;
     }
 
-    try {
-      const response = await axios.post(
-        "/jobs/search",
-        JSON.stringify(searchObject),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-
-      if (response.data.length === 0) {
-        setSearchError("No results found");
-        updateError();
-      }
-      setData(response.data);
-    } catch (err) {
-      console.log(err);
-    }
+    dispatch({
+      type: "SET_SEARCH_JOBS",
+      payload: searchObject,
+    });
   }
 
   return (
-    <div className="row container mx-auto mt-4 ">
+    <div className="row container mx-auto">
       <div className="col-xl-12 col-sm-12 px-0">
         <div className="card">
           <div className="card-header bg-light border-top-alert p-3">
@@ -162,7 +166,7 @@ export default function SearchComponent() {
               <h6 className="px-4 pb-2 text-danger">{searchError}</h6>
             )}
           </form>
-          {data.length > 0 && <JobsTable data={data} />}
+          {jobs.length > 0 && <JobsTable data={jobs} />}
         </div>
       </div>
     </div>
