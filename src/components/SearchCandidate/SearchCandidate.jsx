@@ -1,13 +1,12 @@
 import React, { useRef, useState } from "react";
 import axios from "../../api/axios";
-import { locations } from "../../utils/lists";
-import { categories } from "../../utils/jobCategories";
+import { locations, countries } from "../../utils/lists";
 import CandidateSearchTable from "./CandidateSearchTable";
 
 export default function SearchCandidate() {
   const [name, setName] = useState(null);
   const [location, setLocation] = useState(null);
-  const [category, setCategory] = useState(null);
+  const [country, setCountry] = useState(null);
   const [searchError, setSearchError] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -17,14 +16,14 @@ export default function SearchCandidate() {
   const nameRef = useRef();
 
   //show clear button
-  const showClearButton = name || location || category;
+  const showClearButton = name || location || country;
 
   //clear search
   function clearSearch() {
     setSearchError(null);
     setName(null);
     setLocation(null);
-    setCategory(null);
+    setCountry(null);
 
     setData([]);
 
@@ -47,7 +46,7 @@ export default function SearchCandidate() {
       where: {
         ...(name && { fullName: { search: name } }),
         ...(location && { location: location }),
-        ...(category && { category: category }),
+        ...(country && { category: country }),
       },
     };
 
@@ -107,11 +106,11 @@ export default function SearchCandidate() {
                 <div className="col-xs-4 col-md-4">
                   <select
                     className="custom-select custom-select-sm"
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={(e) => setCountry(e.target.value)}
                     ref={categoryRef}
                   >
                     <option value={null} disabled selected></option>
-                    {categories.map((category) => {
+                    {countries.map((category) => {
                       return <option key={category}>{category}</option>;
                     })}
                   </select>
